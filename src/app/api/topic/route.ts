@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import connectMongooDB from "../../../../libs/mongodb";
 import { Topic } from "../../../../models/topic";
-import { request } from "http";
 
 export const POST = async (request: Request) => {
   try {
