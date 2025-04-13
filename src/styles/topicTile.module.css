@@ -1,0 +1,18 @@
+.container {
+    display: grid;
+    grid-template-columns: 90% 10%;
+    align-items: center;
+    color: rgb(222, 222, 222);
+    background-color: #282c34;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+}
+
+.content {}
+
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 10%;
+}
