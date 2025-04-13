@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { Topic } from "../../../../../models/topic";
 import connectMongooDB from "../../../../../libs/mongodb";
 
-export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
+export const DELETE = async (_request: Request, { params }: { params: { id: string } }) => {
   try {
 
     const { id } = params;
@@ -98,7 +98,7 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
 }
 
 
-export const GET = async (request: Request, { params }: { params: { id: string } }) => {
+export const GET = async (_request: Request, { params }: { params: { id: string } }) => {
   try {
 
     const { id } =  params;

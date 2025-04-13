@@ -19,7 +19,7 @@ export interface ITopicResponse {
 
 export interface IResponse {
   status: number;
-  data: ITopicResponse | any;
+  data: ITopicResponse;
   timestamp: string;
 }
 

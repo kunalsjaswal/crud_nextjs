@@ -28,7 +28,7 @@ export const POST = async (request: Request) => {
   }
 };
 
-export const GET = async (request: Request) => {
+export const GET = async () => {
   try {
     await connectMongooDB();
     const topics = await Topic.find();

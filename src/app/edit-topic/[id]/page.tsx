@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react'
 import style from '../../../styles/addTopic.module.css'
 import { useRouter } from 'next/navigation';
-import { log } from 'console';
 
 interface ITopicData {
   _id: number;
