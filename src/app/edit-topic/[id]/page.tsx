@@ -17,56 +17,60 @@ interface Params {
 }
 
 interface EditTopicProps {
-  params: Params
+  params: Promise<Params>; 
 }
 
 const EditTopic: React.FC<EditTopicProps> = ({ params }) => {
 
-  const { id } = params;  
+  const [id, setId] = useState<string | null>(null); // State to store the unwrapped ID
+  const [topic, setTopic] = useState<ITopicData>({} as ITopicData);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [topic, setTopic] = useState<ITopicData>({} as ITopicData)
-  const [isLoading, setIsLoading] = useState(false)
-
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
+    const unwrapParams = async () => {
+      const unwrappedParams = await params; // Await the params Promise
+      setId(unwrappedParams.id); // Set the ID in state
+    };
+
+    unwrapParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (id) {
       getTopicById();
-
-  }, [id])
-
-  const getTopicById = async() => {
-    setIsLoading(true)
-
-    const response = await fetch(`/api/topic/${id}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json', 
-        }
-      }
-    );
-
-    const data = await response.json()
-    if (!response.ok) {
-      window.alert('Error fetching topic')
-      setIsLoading(false)
-      return
     }
+  }, [id]);
 
-    console.log(data);
-    
-    setTopic(data.data)
-
-    setIsLoading(false)
-  }
-
-  const onUpdateClickHandler = async () => {
-    setIsLoading(true)
+  const getTopicById = async () => {
+    setIsLoading(true);
 
     const response = await fetch(`/api/topic/${id}`, {
-      method: 'PUT',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      window.alert("Error fetching topic");
+      setIsLoading(false);
+      return;
+    }
+
+    setTopic(data.data);
+    setIsLoading(false);
+  };
+
+  const onUpdateClickHandler = async () => {
+    setIsLoading(true);
+
+    const response = await fetch(`/api/topic/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         title: topic.title,
@@ -75,17 +79,15 @@ const EditTopic: React.FC<EditTopicProps> = ({ params }) => {
     });
 
     if (!response.ok) {
-      window.alert('Error updating topic')
-      setIsLoading(false)
-      return
+      window.alert("Error updating topic");
+      setIsLoading(false);
+      return;
     }
 
-    window.alert('Topic updated successfully')
-    setIsLoading(false)
-    setTopic({} as ITopicData)
-
-    router.push('/');
-  }
+    window.alert("Topic updated successfully");
+    setIsLoading(false);
+    router.push("/");
+  };
 
 
   return (

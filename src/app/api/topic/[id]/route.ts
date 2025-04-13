@@ -2,10 +2,9 @@ import { NextResponse } from "next/server";
 import { Topic } from "../../../../../models/topic";
 import connectMongooDB from "../../../../../libs/mongodb";
 
-export const DELETE = async (_request: Request, { params }: { params: { id: string } }) => {
+export const DELETE = async (_request: Request, context: { params: Promise<{ id: string }> }) => {
   try {
-
-    const { id } = params;
+    const { id } = await context.params; // Await the params object
 
     if (!id) {
       return NextResponse.json(
@@ -18,7 +17,6 @@ export const DELETE = async (_request: Request, { params }: { params: { id: stri
       );
     }
 
-    
     await connectMongooDB();
 
     const topic = await Topic.findByIdAndDelete(id);
@@ -53,10 +51,9 @@ export const DELETE = async (_request: Request, { params }: { params: { id: stri
   }
 };
 
-
-export const PUT = async (request: Request, { params }: { params: { id: string } }) => {
+export const PUT = async (request: Request, context: { params: Promise<{ id: string }> }) => {
   try {
-    const { id } = params;
+    const { id } = await context.params; // Await the params object
     const { title, description } = await request.json();
     await connectMongooDB();
 
@@ -83,7 +80,6 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
       },
       { status: 200 }
     );
-    
   } catch (error) {
     console.log(error);
     return NextResponse.json(
@@ -95,13 +91,12 @@ export const PUT = async (request: Request, { params }: { params: { id: string }
       { status: 500 }
     );
   }
-}
+};
 
-
-export const GET = async (_request: Request, { params }: { params: { id: string } }) => {
+export const GET = async (_request: Request, context: { params: Promise<{ id: string }> }) => {
   try {
+    const { id } = await context.params; // Await the params object
 
-    const { id } =  params;
     if (!id) {
       return NextResponse.json(
         {
@@ -135,7 +130,6 @@ export const GET = async (_request: Request, { params }: { params: { id: string 
       },
       { status: 200 }
     );
-    
   } catch (error) {
     console.log(error);
     return NextResponse.json(
@@ -147,4 +141,4 @@ export const GET = async (_request: Request, { params }: { params: { id: string 
       { status: 500 }
     );
   }
-}
+};
